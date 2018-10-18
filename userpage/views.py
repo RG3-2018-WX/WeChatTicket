@@ -1,7 +1,7 @@
 from codex.baseerror import *
 from codex.baseview import APIView
 
-from wechat.models import User
+from wechat.models import User,Ticket,Activity
 
 
 class UserBind(APIView):
@@ -23,3 +23,11 @@ class UserBind(APIView):
         self.validate_user()
         user.student_id = self.input['student_id']
         user.save()
+
+class ActivityDetail(APIView):
+    def get(self):
+        pass
+
+class TicketDetail(APIView):
+    def get(self):
+        pass
