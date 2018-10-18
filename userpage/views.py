@@ -14,7 +14,7 @@ class UserBind(APIView):
         """
         if re.fullmatch(r"[0-9]{10}",self.input['student_id']) is None:
             raise ValidateError("Student Id not legal.")
-        raise NotImplementedError('You should implement UserBind.validate_user method')
+        #raise NotImplementedError('You should implement UserBind.validate_user method')
 
     def get(self):
         self.check_input('openid')

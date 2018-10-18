@@ -53,12 +53,16 @@ class WechatTest(TestCase):
 
     def test_user_not_exsit(self):
         self.before_test()
+        user = User(open_id='2')
+        user.save()
         c = Client()
         d = c.post('/api/u/user/bind/', {'openid': '2','student_id':'2016013238','password':"123456"})
-        print(d.status_code)
         self.assertEqual(d.status_code, 200)
 
-
+        c = Client()
+        d = c.get('/api/u/user/bind/', {'openid': '2'})
+        json_text = json.loads(d.content)
+        self.assertEqual(json_text['data'], '2016013238')
 
 
 # Create your tests here.
