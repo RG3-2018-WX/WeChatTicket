@@ -8,9 +8,8 @@ services:
 python:
   - 3.6
  
- 
 before_install:
-    -mysql -e 'CREATE DATABASE wechat_ticket'
+ - sudo mysql -e 'CREATE DATABASE wechat_ticket;'
  
 install:
  - pip install -r requirements.txt
