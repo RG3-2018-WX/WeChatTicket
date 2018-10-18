@@ -25,13 +25,15 @@ class ActivityCreate(APIView):
     def post(self):
         pass
 
-class ActivityUpload(APIView):
+class ImageUpload(APIView):
     def post(self):
         pass
 
 class ActivityDetail(APIView):
     def get(self):
-        pass
+        print("get")
+        self.check_input('activity_id')
+        return Activity.get_by_id(self.input['activity_id'])
     def post(self):
         pass
 

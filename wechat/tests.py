@@ -1,10 +1,10 @@
 from django.test import TestCase
 import datetime
 from .models import User,Activity,Ticket
-
+from django.test import Client
 
 class WechatTest(TestCase):
-
+    '''
     user_to_add = User(open_id = 1,student_id = 1)
     user_to_add.save()
 	
@@ -31,12 +31,15 @@ class WechatTest(TestCase):
 	status = 1
 	)
     ticket_to_add.save()
-	
+    '''
+    #c = Client()
     def test_(self):
+
         self.assertEqual(1,1)
 	
 	
     def test_user_exist(self):
+       # self.c.get('//')
         self.assertEqual(1, 1)
 
     def test_user_not_exsit(self):

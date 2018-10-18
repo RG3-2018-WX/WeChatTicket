@@ -16,6 +16,7 @@ class User(models.Model):
 
 
 class Activity(models.Model):
+    id = models.AutoField(primary_key=True,unique=True)
     name = models.CharField(max_length=128)
     key = models.CharField(max_length=64, db_index=True)
     description = models.TextField()
@@ -32,6 +33,13 @@ class Activity(models.Model):
     STATUS_DELETED = -1
     STATUS_SAVED = 0
     STATUS_PUBLISHED = 1
+
+    @classmethod
+    def get_by_id(cls,id):
+        try:
+            return cls.objects.get(id=id)
+        except cls.DoesNotExist:
+            raise LogicError("Activity not found")
 
 
 class Ticket(models.Model):
