@@ -4,6 +4,7 @@ from .models import User,Activity,Ticket
 
 
 class WechatTest(TestCase):
+
     user_to_add = User(open_id = 1,student_id = 1)
     user_to_add.save()
 	
