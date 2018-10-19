@@ -13,7 +13,8 @@ before_install:
  
 install:
  - pip install -r requirements.txt
-  
+  - pip install uwsgi
+ 
 script:
   - cp configs.example.json configs.json
 
@@ -21,6 +22,7 @@ script:
   - python manage.py makemigrations
   - python manage.py migrate
 
-  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python manage.py shell
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'xiaoxd16@163.com', '123456')" | python manage.py shell
 
   - python manage.py test
+ 

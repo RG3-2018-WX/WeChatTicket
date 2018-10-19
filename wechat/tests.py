@@ -42,7 +42,7 @@ class WechatTest(TestCase):
     def test_(self):
 
         self.assertEqual(1, 1)
-'''
+
     def test_user_bind_get(self):
         self.before_test()
         c = Client()
@@ -154,8 +154,8 @@ class WechatTest(TestCase):
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
         
-        def _login_get_exist(self):
-
+    def _login_get_exist(self):
+        
         c = Client()
         d = c.get('/api/a/login/', {})
         if d.status_code == 404:
@@ -206,22 +206,97 @@ class WechatTest(TestCase):
 
 
     def test_activity_create_succeed(self):
-        pass
-
+        self.before_test()
+        c = Client()
+        d = c.post("/api/a/activity/create/",{
+        'name':'2',
+        'key':'2-key',
+        'place':'place',
+        'description':'description',
+        'picUrl':'url',
+        'startTime':'1000000000',
+        'endTime':'1000000100',
+        'bookStart':'999999900',
+        'bookEnd':'999999990',
+        'totalTickets':100,
+        'status':0})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        self.assertEqual(json_text['code'],0)
+        self.assertEqual(json_text['data'],2)
 
     def test_activity_create_not_succeed(self):
-        pass
+        self.before_test()
+        c = Client()
+        d = c.post("/api/a/activity/create/",{})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        self.assertNotEqual(json_text['code'],0)
 
 
     def test_image_upload_succeed(self):
-        pass
+        self.before_test()
+        c = Client()
+        d = c.post('/api/a/image/upload/',{})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        self.assertEqual(json_text['code'],0)
+        #self.assertEqual(json_text['data'],)
+		
 
 
     def test_image_upload_not_succeed(self):
+        self.before_test()
+        c = Client()
+        d = c.post('/api/a/image/upload/',{})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        self.assertNotEqual(json_text['code'],0)
+		
+    def test_activity_detail_get(self):
+        self.before_test()
+        c = Client()
+        d = c.get('/api/a/activity/detail/',{'id':1})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        #self.assertEqual()#deal with get data		
+
+    def test_activity_menu_get(self):
+        self.before_test()
+        c = Client()
+        d = c.get('/api/a/activity/menu/',{})
+        if d.status_code == 404:
+           return  
+        self.assertEqual(d.status_code,200)
+        #self.assertEqual()#check data
+
+    def test_activity_menu_post_succeed(self):
         pass
-        '''
 
+    def test_activity_menu_post_not_succeed(self):
+        pass
 
-
-
+    def test_checkin_post_succeed(self):
+        pass
+	
+    def test_checkin_post_not_succeed(self):
+        self.before_test()
+        c = Client()
+        d = c.get('/api/a/activity/checkin/',{'id':1})
+        if d.status_code == 404:
+           return  
+        json_text = json.loads(d.content)
+        self.assertEqual(d.status_code,200)
+        
+        self.assertNotEqual(json_text['code'],0)#check data
 # Create your tests here.

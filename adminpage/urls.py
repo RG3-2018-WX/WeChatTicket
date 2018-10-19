@@ -7,7 +7,8 @@ from adminpage.views import *
 __author__ = "Epsirom"
 
 
-urlpatterns = [
+urlpatterns = []
+'''
 
     url(r'^login/?$', Login.as_view()),
     url(r'^logout/?$', Logout.as_view()),
@@ -19,4 +20,4 @@ urlpatterns = [
     url(r'^activity/menu/?$', ActivityMenu.as_view()),
     url(r'^activity/checkin/?$', ActivityCheckin.as_view())
 
-]
+'''
