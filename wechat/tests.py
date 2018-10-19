@@ -49,7 +49,7 @@ class WechatTest(TestCase):
         d = c.get('/api/u/user/bind/', {'openid': '1'})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(json_text['data'], '2016013237')
 
     def test_user_bind_post_exsit(self):
@@ -61,14 +61,14 @@ class WechatTest(TestCase):
         if d.status_code == 404:
             return
         self.assertEqual(d.status_code, 200)
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(json_text['code'], 0)
 
         c = Client()
         d = c.get('/api/u/user/bind/', {'openid': '2'})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(json_text['data'], '2016013238')
 
     def test_user_bind_post_not_exist(self):
@@ -78,7 +78,7 @@ class WechatTest(TestCase):
         if d.status_code == 404:
             return
         self.assertEqual(d.status_code, 200)
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertNotEqual(json_text['code'], 0)
 
     def test_activity_detail_get_exist(self):
@@ -87,7 +87,7 @@ class WechatTest(TestCase):
         d = c.get('/api/u/activity/detail/', {'id': 1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(json_text['data']['key'], '1-key')
         self.assertNotEqual(json_text['code'], 0)
 
@@ -97,7 +97,7 @@ class WechatTest(TestCase):
         d = c.get('/api/u/activity/detail/', {'id': 1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code, 200)
         self.assertNotEqual(json_text['code'], 0)
 
@@ -107,7 +107,7 @@ class WechatTest(TestCase):
         d = c.get('/api/u/ticket/detail/', {'openid': 1, 'unique_id': 1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code, 200)
         self.assertEqual(json_text['data']['activityKey'], '1-key')
 
@@ -119,7 +119,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/login/',{'username':'admin','password':'123456'})
         if d.status_code == 404:
             return 
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertEqual(json_text['code'],0)
         self._login_get_exist()
@@ -130,7 +130,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/login/',{'username':'admin','password':'1234567'})
         if d.status_code == 404:
             return 
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
 
@@ -140,7 +140,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/logout/',{})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertEqual(json_text['code'],0)
 
@@ -150,7 +150,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/logout/',{})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
         
@@ -160,7 +160,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/login/', {})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(json_text['code'], 0)
 
     def test_login_get_not_exist(self):
@@ -169,7 +169,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/login/', {})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertNotEqual(json_text['code'], 0)
 
     def test_activity_list_get(self):
@@ -178,7 +178,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/activity/list', {})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code, 200)
     # self.assertEqual(json_text['data'][0]['id'],1)
 
@@ -188,7 +188,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/activity/delete/', {'id': 1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code, 200)
         self.assertEqual(json_text['code'], 0)
 
@@ -200,7 +200,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/activity/delete/', {'id': 1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code, 200)
         self.assertNotEqual(json_text['code'], 0)
 
@@ -222,7 +222,7 @@ class WechatTest(TestCase):
         'status':0})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertEqual(json_text['code'],0)
         self.assertEqual(json_text['data'],2)
@@ -233,7 +233,7 @@ class WechatTest(TestCase):
         d = c.post("/api/a/activity/create/",{})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
 
@@ -244,7 +244,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/image/upload/',{})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertEqual(json_text['code'],0)
         #self.assertEqual(json_text['data'],)
@@ -257,7 +257,7 @@ class WechatTest(TestCase):
         d = c.post('/api/a/image/upload/',{})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
 		
@@ -267,7 +267,7 @@ class WechatTest(TestCase):
         d = c.get('/api/a/activity/detail/',{'id':1})
         if d.status_code == 404:
             return
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         #self.assertEqual()#deal with get data		
 
@@ -287,15 +287,23 @@ class WechatTest(TestCase):
         pass
 
     def test_checkin_post_succeed(self):
-        pass
-	
+        self.before_test()
+        c = Client()
+        d = c.get('/api/a/activity/checkin/', {'actid':1,'ticket':1})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content.decode('utf-8'))
+        self.assertEqual(d.status_code, 200)
+        self.assertEqual(json_text['data']['student'],1)
+        self.assertNotEqual(json_text['code'], 0)  # check data
+
     def test_checkin_post_not_succeed(self):
         self.before_test()
         c = Client()
-        d = c.get('/api/a/activity/checkin/',{'id':1})
+        d = c.get('/api/a/activity/checkin/',{'actid':2,'ticket':2})
         if d.status_code == 404:
            return  
-        json_text = json.loads(d.content)
+        json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         
         self.assertNotEqual(json_text['code'],0)#check data
