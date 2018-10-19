@@ -13,7 +13,7 @@ before_install:
  
 install:
  - pip install -r requirements.txt
-  - pip install uwsgi
+ - pip install uwsgi
  
 script:
   - cp configs.example.json configs.json
