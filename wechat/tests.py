@@ -42,7 +42,7 @@ class WechatTest(TestCase):
     def test_(self):
 
         self.assertEqual(1, 1)
-
+'''
     def test_user_bind_get(self):
         self.before_test()
         c = Client()
@@ -112,7 +112,7 @@ class WechatTest(TestCase):
         self.assertEqual(json_text['data']['activityKey'], '1-key')
 
 
-'''
+
     def test_login_post_succeed(self):
         self.before_test()
         c = Client()
