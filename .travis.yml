@@ -21,8 +21,6 @@ script:
   - python manage.py makemigrations
   - python manage.py migrate
 
-  - python manage.py createsuperuser --username admin --email xiaoxd16@163.com
-    - 12345678
-    - 12345678
+  - python createUser.py
 
   - python manage.py test
