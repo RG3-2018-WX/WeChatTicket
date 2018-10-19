@@ -16,12 +16,15 @@ install:
   
 script:
   - cp configs.example.json configs.json
-  - python manage.py createsuperuser
-  - admin
-  - xiaoxd16@163.com
-  - 12345678
-  - 12345678
+
 
   - python manage.py makemigrations
   - python manage.py migrate
+
+  - python manage.py createsuperuser
+    - admin
+    - xiaoxd16@163.com
+    - 12345678
+    - 12345678
+    
   - python manage.py test
