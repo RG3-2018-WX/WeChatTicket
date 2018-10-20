@@ -5,11 +5,12 @@ from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from wechat.models import Activity,Ticket
-
+global user_status
+user_status=0
 class Login(APIView):
-    status = 0
+    global user_status
     def get(self):
-        if Login.status==1:
+        if user_status==1:
             return 0
         else:
             return 1
@@ -20,13 +21,24 @@ class Login(APIView):
         if user is not None:
             if user.is_active:
                 login(self, user)
-                Login.status=1
+                user_status=1
+                return 0
+            else:
+                return 1
+        else:
+            return 1
 
 
 
 class Logout(APIView):
+    global user_status
     def post(self):
-        logout(self)
+        if user_status==1:
+            logout(self)
+            user_status=0
+            return 0
+        else:
+            return 1
 
 class ActivityList(APIView):
     def get(self):
