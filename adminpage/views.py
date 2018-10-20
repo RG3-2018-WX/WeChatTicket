@@ -186,7 +186,7 @@ class ActivityMenu(APIView):
                     'menuIndex':0
                     }
 
-            data_result=json.dumps(data_result)
+            
             datalist.append(data_result)
         datalist.reverse()
         if len(datalist) < 5:
