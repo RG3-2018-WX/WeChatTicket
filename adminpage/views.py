@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from wechat.models import Activity,Ticket
 
+import datetime
+
 class Login(APIView):
     def get(self):
         if not self.request.user.is_authenticated():
@@ -51,6 +53,23 @@ class ActivityList(APIView):
         self.check_input('id')
 
         list = Activity.get_status_ge_0()
+        
+        output_list = []
+        for i in list:
+			output_list.append({
+			'id':i.id,
+			'name':i.name,
+			'description':i.description,
+			'startTime':i.start_time.timestamp(),
+			'endTime':i.end_time.timestamp(),
+			'place':i.place,
+			'bookStart':i.book_start.timestamp(),
+			'bookEnd':i.book_end.timestamp(),
+			'currentTime':datetime.datetime.now().timestamp()
+			
+			})
+        
+
 
 
 class ActivityDelete(APIView):
