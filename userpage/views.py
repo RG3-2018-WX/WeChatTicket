@@ -1,20 +1,19 @@
 from codex.baseerror import *
 from codex.baseview import APIView
-import re
-from wechat.models import User,Ticket,Activity
 
+from wechat.models import User,Ticket,Activity
+import json
+import datetime
 
 class UserBind(APIView):
 
     def validate_user(self):
-        """
-        input: self.input['student_id'] and self.input['password']
-        raise: ValidateError when validating failed
-
-        """
-        if re.fullmatch(r"[0-9]{10}",self.input['student_id']) is None:
-            raise ValidateError("Student Id not legal.")
-        #raise NotImplementedError('You should implement UserBind.validate_user method')
+        self.check_input('student_id','password')
+        user=User.objects.get(student_id=self.input['student_id'])
+        if user.password==self.input['password']:
+            return 1
+        else:
+            raise ValidateError( )
 
     def get(self):
         self.check_input('openid')
@@ -29,8 +28,38 @@ class UserBind(APIView):
 
 class ActivityDetail(APIView):
     def get(self):
-        pass
-
+        self.check_input('id')
+        activity=Activity.objects.get(key=self.input('id'))
+        if activity.status==1:
+            data={'name':activity.name,
+                  'key':activity.key,
+                  'description':activity.description,
+                  'startTime':activity.start_time,
+                  'endTime':activity.end_time,
+                  'place':activity.place,
+                  'bookStart':activity.book_start,
+                  'bookEnd':activity.book_end,
+                  'totalTicket':activity.total_tickets,
+                  'picUrl':activity.pic_url,
+                  'remainTicket':activity.remain_tickets,
+                  'currentTime':datetime.datetime.now()
+                  }
+            data=json.dumps(data)
+            return data
+        else:
+            return 1
 class TicketDetail(APIView):
     def get(self):
-        pass
+        self.check_input('openid','ticket')
+        ticket=Ticket.objects.get(unique_id=self.input('ticket'))
+        data={  'activityName':ticket.activity.name,
+                'place':ticket.activity.place,
+                'activityKey':ticket.activity.key,
+                'uniqueId':ticket.unique_id,
+                'startTime':ticket.activity.start_time,
+                'endTime':ticket.activity.end_time,
+                'currentTime':datetime.datetime.now(),
+                'status':ticket.status
+                }
+        data=json.dumps(data)
+        return data
