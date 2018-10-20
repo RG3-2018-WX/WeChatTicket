@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
-from wechat.models import Activity,Ticket
+from wechat.models import Activity, Ticket
+
 
 import datetime
 
@@ -17,39 +18,30 @@ class Login(APIView):
         return 0
 
     def post(self):
-       
+
         self.check_input('username', 'password')
         user = authenticate(username=self.input['username'], password=self.input['password'])
-        if user is not None:
-            if user.is_active:
-                login(self, user)
+        if user is not None and user.is_active:
+             login(self.request, user)
+             return 0
 
-
-
-       
-                return 0
-            else:
-                return 1
         else:
-            return 1
-
+            raise ValidateError("wrong password")
 
 
 class Logout(APIView):
-   
+
     def post(self):
-        global user_status
-        if user_status==1:
-            logout(self)
-            user_status=0
-            return 0
+        if not self.request.user.is_authenticated():
+            raise LogicError('no user is online')
         else:
-            return 1
+            logout(self.request)
+
 
 class ActivityList(APIView):
     def get(self):
         if not self.request.user.is_authenticated():
-            raise  ValidateError("Please Login First!")
+            raise ValidateError("Please Login First!")
         self.check_input('id')
 
         list = Activity.get_status_ge_0()
@@ -76,25 +68,32 @@ class ActivityDelete(APIView):
     def post(self):
         pass
 
+
 class ActivityCreate(APIView):
     def post(self):
         pass
+
 
 class ImageUpload(APIView):
     def post(self):
         pass
 
+
 class ActivityDetail(APIView):
     def get(self):
         pass
+
     def post(self):
         pass
+
 
 class ActivityMenu(APIView):
     def get(self):
         pass
+
     def post(self):
         pass
+
 
 class ActivityCheckin(APIView):
     def post(self):

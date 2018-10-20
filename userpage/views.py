@@ -13,7 +13,7 @@ class UserBind(APIView):
         if user.password==self.input['password']:
             return 1
         else:
-            raise ValidateError( )
+            raise ValidateError()
 
     def get(self):
         self.check_input('openid')
@@ -47,7 +47,7 @@ class ActivityDetail(APIView):
             data=json.dumps(data)
             return data
         else:
-            return 1
+            raise InputError('Activity is not active')
 class TicketDetail(APIView):
     def get(self):
         self.check_input('openid','ticket')
