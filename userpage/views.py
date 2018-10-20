@@ -47,7 +47,7 @@ class ActivityDetail(APIView):
             data=json.dumps(data)
             return data
         else:
-            return InputError
+            raise InputError('Activity is not active')
 class TicketDetail(APIView):
     def get(self):
         self.check_input('openid','ticket')
