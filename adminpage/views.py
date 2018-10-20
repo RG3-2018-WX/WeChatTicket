@@ -89,7 +89,7 @@ class ActivityCreate(APIView):
                     description = self.input['description'],
                     start_time = self.input['startTime'],
                     end_time = self.input['endTime'],
-                    place = self.input['palce'],
+                    place = self.input['place'],
                     book_start = self.input['bookStart'],
                     book_end = self.input['bookEnd'],
                     total_tickets = self.input['totalTickets'],
