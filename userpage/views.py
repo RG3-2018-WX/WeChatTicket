@@ -11,7 +11,7 @@ class UserBind(APIView):
         self.check_input('student_id','password')
         user=User.objects.get(student_id=self.input['student_id'])
         if user.password==self.input['password']:
-            return 1
+           
         else:
             raise ValidateError()
 
