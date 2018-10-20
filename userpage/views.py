@@ -1,6 +1,6 @@
 from codex.baseerror import *
 from codex.baseview import APIView
-
+from django.utils import timezone
 from wechat.models import User,Ticket,Activity
 import json
 import datetime
@@ -30,37 +30,35 @@ class UserBind(APIView):
 class ActivityDetail(APIView):
     def get(self):
         self.check_input('id')
-        activity=Activity.objects.filter(id=self.input('id'))
+        activity=Activity.objects.filter(id=self.input['id'])
         if activity.status==1:
             data={'name':activity.name,
                   'key':activity.key,
                   'description':activity.description,
-                  'startTime':activity.start_time,
-                  'endTime':activity.end_time,
+                  'startTime':activity.start_time.timestamp(),
+                  'endTime':activity.end_time.timestamp(),
                   'place':activity.place,
-                  'bookStart':activity.book_start,
-                  'bookEnd':activity.book_end,
+                  'bookStart':activity.book_start.timestamp(),
+                  'bookEnd':activity.book_end.timestamp(),
                   'totalTicket':activity.total_tickets,
                   'picUrl':activity.pic_url,
                   'remainTicket':activity.remain_tickets,
-                  'currentTime':datetime.datetime.now()
+                  'currentTime':timezone.now().timestamp(),
                   }
-            data=json.dumps(data)
             return data
         else:
             raise InputError('Activity is not active')
 class TicketDetail(APIView):
     def get(self):
         self.check_input('openid','ticket')
-        ticket=Ticket.objects.get(unique_id=self.input('ticket'))
+        ticket=Ticket.objects.get(unique_id=self.input['ticket'])
         data={  'activityName':ticket.activity.name,
                 'place':ticket.activity.place,
                 'activityKey':ticket.activity.key,
                 'uniqueId':ticket.unique_id,
-                'startTime':ticket.activity.start_time,
-                'endTime':ticket.activity.end_time,
-                'currentTime':datetime.datetime.now(),
+                'startTime':ticket.activity.start_time.timestamp(),
+                'endTime':ticket.activity.end_time.timestamp(),
+                'currentTime':timezone.now().timestamp(),
                 'status':ticket.status
                 }
-        data=json.dumps(data)
         return data
