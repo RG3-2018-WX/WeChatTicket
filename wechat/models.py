@@ -1,5 +1,5 @@
 from django.db import models
-
+import random,string
 from codex.baseerror import LogicError
 
 
@@ -16,7 +16,6 @@ class User(models.Model):
 
 
 class Activity(models.Model):
-    id = models.AutoField(primary_key=True,unique=True)
     name = models.CharField(max_length=128)
     key = models.CharField(max_length=64, db_index=True)
     description = models.TextField()
@@ -53,6 +52,18 @@ class Ticket(models.Model):
     unique_id = models.CharField(max_length=64, db_index=True, unique=True)
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
+
+    @classmethod
+    def generate_unique_id(cls):
+        temp = ''.join(random.sample(string.ascii_letters + string.digits,32))
+
+        while 1:
+            print('loop')
+            temp = ''.join(random.sample(string.ascii_letters + string.digits, 32))
+            t = cls.objects.filter(unique_id=temp)
+            if(not len(t)):
+                return temp
+
 
     STATUS_CANCELLED = 0
     STATUS_VALID = 1

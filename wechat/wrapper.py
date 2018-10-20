@@ -15,6 +15,10 @@ from WeChatTicket import settings
 from codex.baseview import BaseView
 from wechat.models import User
 
+from django.utils import timezone
+
+from wechat.models import *
+
 
 __author__ = "Epsirom"
 
@@ -74,6 +78,9 @@ class WeChatHandler(object):
     def is_text(self, *texts):
         return self.is_msg_type('text') and (self.input['Content'].lower() in texts)
 
+    def is_in_text(self,*texts):
+        return self.is_msg_type('text') and (texts[0] in self.input['Content'].lower())
+
     def is_event_click(self, *event_keys):
         return self.is_msg_type('event') and (self.input['Event'] == 'CLICK') and (self.input['EventKey'] in event_keys)
 
@@ -89,8 +96,12 @@ class WeChatHandler(object):
     def url_bind(self):
         return settings.get_url('u/bind', {'openid': self.user.open_id})
 
-    def url_ticket(self):
-        return settings.get_url('u/ticket/detail')
+    def url_ticket(self,unique_id):
+        ticket = Ticket.objects.filter(unique_id=unique_id)[0]
+        return settings.get_url('u/ticket',{
+            'openid':self.user.id,
+            'ticket':ticket.unique_id,
+        })
 
     def url_activity(self, id):
         return settings.get_url('u/activity', {'id': id})

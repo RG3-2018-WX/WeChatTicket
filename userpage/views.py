@@ -30,7 +30,7 @@ class UserBind(APIView):
 class ActivityDetail(APIView):
     def get(self):
         self.check_input('id')
-        activity=Activity.objects.filter(id=self.input['id'])
+        activity=Activity.objects.get(id=self.input['id'])
         if activity.status==1:
             data={'name':activity.name,
                   'key':activity.key,

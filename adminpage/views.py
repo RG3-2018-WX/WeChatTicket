@@ -110,11 +110,11 @@ class ImageUpload(APIView):
         try:
             image = self.input["image"][0]
             name = str(uuid.uuid1()) + image.name
-            file = open('./static/uimg/' + name, 'wb')
+            file = open('./static/pic/' + name, 'wb')
             for chunk in image.chunks():
                 file.write(chunk)
             file.close()
-            path = 'uimg/' + name
+            path = 'pic/' + name
             url = os.path.join(settings.CONFIGS["SITE_DOMAIN"], path)
             return url
         except:
