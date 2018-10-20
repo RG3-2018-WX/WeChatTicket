@@ -2,7 +2,7 @@ import datetime
 import json
 
 from django.test import TestCase
-from .models import User, Activity, Ticket
+from .models import User as MyUser, Activity, Ticket
 from django.test import Client
 from userpage.views import *
 from adminpage.views import *
@@ -11,7 +11,7 @@ from adminpage.views import *
 class WechatTest(TestCase):
 
     def before_test(self):
-        user_to_add = User(open_id='1', student_id='2016013237')
+        user_to_add = MyUser(open_id='1', student_id='2016013237')
         user_to_add.save()
 
         activity_to_add = Activity(
@@ -54,7 +54,7 @@ class WechatTest(TestCase):
 
     def test_user_bind_post_exsit(self):
         self.before_test()
-        user = User(open_id='2')
+        user = MyUser(open_id='2',student_id="1234567890")
         user.save()
         c = Client()
         d = c.post('/api/u/user/bind/', {'openid': '2', 'student_id': '2016013238', 'password': "123456"})
@@ -122,7 +122,12 @@ class WechatTest(TestCase):
         json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertEqual(json_text['code'],0)
-        self._login_get_exist()
+        #login_get_existc = Client()
+        d = c.get('/api/a/login/', {})
+        if d.status_code == 404:
+            return
+        json_text = json.loads(d.content.decode('utf-8'))
+        self.assertEqual(json_text['code'], 0)
 
     def test_login_post_not_succeed(self):
         self.before_test()
@@ -153,15 +158,7 @@ class WechatTest(TestCase):
         json_text = json.loads(d.content.decode('utf-8'))
         self.assertEqual(d.status_code,200)
         self.assertNotEqual(json_text['code'],0)
-        
-    def _login_get_exist(self):
-        
-        c = Client()
-        d = c.get('/api/a/login/', {})
-        if d.status_code == 404:
-            return
-        json_text = json.loads(d.content.decode('utf-8'))
-        self.assertEqual(json_text['code'], 0)
+               
 
     def test_login_get_not_exist(self):
         self.before_test()
