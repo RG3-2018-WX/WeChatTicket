@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from wechat.models import Activity, Ticket
-import json
+
 
 from wechat import models
 from wechat.models import Activity, Ticket
@@ -60,7 +60,7 @@ class ActivityList(APIView):
 			'place':i.place,
 			'bookStart':i.book_start.timestamp(),
 			'bookEnd':i.book_end.timestamp(),
-			'currentTime':timezone.now(),
+			'currentTime':timezone.now().timestamp(),
             'status':i.status
 			})
         return output_list
@@ -69,8 +69,8 @@ class ActivityList(APIView):
 class ActivityDelete(APIView):
     def post(self):
         self.check_input('id')
-        if Activity.objects.get(id=self.input('id')):
-            activity=Activity.objects.get(id=self.input('id'))
+        if Activity.objects.get(id=self.input['id']):
+            activity=Activity.objects.get(id=self.input['id'])
             activity.status=Activity.STATUS_DELETED
 
         else:
@@ -129,18 +129,18 @@ class ActivityDetail(APIView):
             data = {'name': activity.name,
                     'key': activity.key,
                     'description': activity.description,
-                    'startTime': activity.start_time,
-                    'endTime': activity.end_time,
+                    'startTime': activity.start_time.timestamp(),
+                    'endTime': activity.end_time.timestamp(),
                     'place': activity.place,
-                    'bookStart': activity.book_start,
-                    'bookEnd': activity.book_end,
+                    'bookStart': activity.book_start.timestamp(),
+                    'bookEnd': activity.book_end.timestamp(),
                     'totalTicket': activity.total_tickets,
                     'picUrl': activity.pic_url,
                     'remainTicket': activity.remain_tickets,
                     'usedTicket':activity.total_tickets-activity.remain_tickets,
-                    'currentTime': timezone.now()
+                    'currentTime': timezone.now().timestamp()
                     }
-            data = json.dumps(data)
+            
             return data
         else:
             raise InputError()
@@ -150,22 +150,22 @@ class ActivityDetail(APIView):
     def post(self):
 
         self.check_input('id')
-        activity = Activity.objects.get(id=self.input('id'))
+        activity = Activity.objects.get(id=self.input['id'])
         old_activity=activity
         if activity.status==0:
-            activity.name=self.input('name')
-            activity.place=self.input('place')
-            activity.book_end=self.input('bookEnd')
-            activity.book_start=self.input('bookStart')
-            activity.status=self.input('status')
+            activity.name=self.input['name']
+            activity.place=self.input['place']
+            activity.book_end=self.input['bookEnd']
+            activity.book_start=self.input['bookStart']
+            activity.status=self.input['status']
 
-        activity.pic_url=self.input('picURL')
-        activity.description=self.input('description')
+        activity.pic_url=self.input['picURL']
+        activity.description=self.input['description']
         if timezone.now()<activity.end_time:
-            activity.start_time=self.input('startTime')
-            activity.end_time = self.input('endTime')
+            activity.start_time=self.input['startTime']
+            activity.end_time = self.input['endTime']
         if timezone.now()<activity.book_start:
-            activity.total_tickets=self.input('totalTicket')
+            activity.total_tickets=self.input['totalTicket']
         activity.save()
         if old_activity==activity:
             raise InputError()
@@ -222,8 +222,8 @@ class ActivityCheckin(APIView):
         if not self.request.user.is_authenticated():
             raise ValidateError("Please login!")
         self.check_input('actId')
-        studentId = self.input.get('studentId')
-        uniqueId = self.input.get('ticket')
+        studentId = self.input.get['studentId']
+        uniqueId = self.input.get['ticket']
         if studentId == None and uniqueId == None:
             raise ValidateError('info loss')
         if studentId != None and uniqueId != None:
