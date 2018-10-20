@@ -89,7 +89,7 @@ class ActivityCreate(APIView):
                     description = self.input['description'],
                     start_time = self.input['startTime'],
                     end_time = self.input['endTime'],
-                    place = self.input['palce'],
+                    place = self.input['place'],
                     book_start = self.input['bookStart'],
                     book_end = self.input['bookEnd'],
                     total_tickets = self.input['totalTickets'],
@@ -186,7 +186,7 @@ class ActivityMenu(APIView):
                     'menuIndex':0
                     }
 
-            data_result=json.dumps(data_result)
+            
             datalist.append(data_result)
         datalist.reverse()
         if len(datalist) < 5:
