@@ -4,22 +4,23 @@ from codex.baseview import APIView
 from wechat.models import User,Ticket,Activity
 import json
 import datetime
-
+import re
 class UserBind(APIView):
 
     def validate_user(self):
-        self.check_input('student_id','password')
-        user=User.objects.get(student_id=self.input['student_id'])
-        if user.password==self.input['password']:
-            return 1
+
+        if re.fullmatch(r"[0-9]{10}",self.input['student_id']):
+            return
         else:
             raise ValidateError()
 
     def get(self):
+        print("get user bind")
         self.check_input('openid')
         return User.get_by_openid(self.input['openid']).student_id
 
     def post(self):
+        print("post user bind")
         self.check_input('openid', 'student_id', 'password')
         user = User.get_by_openid(self.input['openid'])
         self.validate_user()
@@ -29,7 +30,7 @@ class UserBind(APIView):
 class ActivityDetail(APIView):
     def get(self):
         self.check_input('id')
-        activity=Activity.objects.get(key=self.input('id'))
+        activity=Activity.objects.filter(id=self.input('id'))
         if activity.status==1:
             data={'name':activity.name,
                   'key':activity.key,

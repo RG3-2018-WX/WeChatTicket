@@ -1,4 +1,4 @@
-import datetime
+
 import json
 
 from django.test import TestCase
@@ -6,7 +6,7 @@ from .models import User as MyUser, Activity, Ticket
 from django.test import Client
 from userpage.views import *
 from adminpage.views import *
-
+from django.utils import timezone
 
 class WechatTest(TestCase):
 
@@ -19,11 +19,11 @@ class WechatTest(TestCase):
             name='1',
             key='1-key',
             description='desc',
-            start_time=datetime.datetime.now(),
-            end_time=datetime.datetime.now() + datetime.timedelta(hours=1),
+            start_time=timezone.now(),
+            end_time=timezone.now() + timezone.timedelta(hours=1),
             place="here",
-            book_start=datetime.datetime.now() - datetime.timedelta(days=1),
-            book_end=datetime.datetime.now() - datetime.timedelta(hours=1),
+            book_start=timezone.now() - timezone.timedelta(days=1),
+            book_end=timezone.now() - timezone.timedelta(hours=1),
             total_tickets=100,
             pic_url="",
             remain_tickets=50,
