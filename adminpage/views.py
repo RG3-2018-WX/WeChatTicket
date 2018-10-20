@@ -138,7 +138,7 @@ class ActivityDetail(APIView):
                     'picUrl': activity.pic_url,
                     'remainTicket': activity.remain_tickets,
                     'usedTicket':activity.total_tickets-activity.remain_tickets,
-                    'currentTime': datetime.datetime.now()
+                    'currentTime': timezone.now()
                     }
             data = json.dumps(data)
             return data
@@ -161,10 +161,10 @@ class ActivityDetail(APIView):
 
         activity.pic_url=self.input('picURL')
         activity.description=self.input('description')
-        if datetime.datetime.now()<activity.end_time:
+        if timezone.now()<activity.end_time:
             activity.start_time=self.input('startTime')
             activity.end_time = self.input('endTime')
-        if datetime.datetime.now()<activity.book_start:
+        if timezone.now()<activity.book_start:
             activity.total_tickets=self.input('totalTicket')
         activity.save()
         if old_activity==activity:
