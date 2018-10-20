@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-from django.utils import timezone
-
 from wechat.wrapper import WeChatHandler
-from wechat.models import *
+
 
 __author__ = "Epsirom"
 
@@ -68,25 +66,26 @@ class BookEmptyHandler(WeChatHandler):
     def handle(self):
         return self.reply_text(self.get_message('book_empty'))
 
-class BookWhatHandler(WeChatHandler):
+class GetTicketHandler(WeChatHandler):
+
     def check(self):
-        return self.is_text("抢啥") or self.is_event_click(self.view.event_keys['book_what'])
+        return self.is_text('查票') or self.is_event_click(self.view.event_keys['get_ticket'])
+
     def handle(self):
-        print("book what")
-        if not self.user.student_id:
-            return self.reply_text(self.get_message('bind_account'))
-        activities = Activity.objects.filter(status = Activity.STATUS_PUBLISHED,book_end__gt=timezone.now()).order_by('-book_end')
+        return self.reply_single_news({
+            'Title': self.get_message('get_ticket'),
+            'Description': self.get_message('ticket_description'),
+            'Url': self.url_ticket(),
+        })
 
-        if len(activities):
-            output = []
-            for activity in activities:
-                output.append({
-                    'Title':activity.name,
-                    'Description':activity.description,
-                    'PicUrl':activity.pic_url,
-                    'Url':self.url_activity(activity.id)
-                })
-                return self.reply_news(output)
-        else:
-            return self.reply_text(self.get_message('book_empty'))
+class RobTicket(WeChatHandler):
 
+    def check(self):
+        return self.is_text('抢票')
+
+    def handle(self):
+        return self.reply_single_news({
+            'Title': self.get_message('book_header'),
+            'Description': self.get_message('ticket_description'),
+            'Url': self.url_ticket(),
+        })
