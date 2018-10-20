@@ -1,17 +1,32 @@
 from django.shortcuts import render
 from codex.baseview import APIView
-
-from wechat.models import User,Activity,Ticket
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
+from wechat.models import Activity,Ticket
 
 class Login(APIView):
+    status = 0
     def get(self):
-        pass
+        if Login.status==1:
+            return 0
+        else:
+            return 1
+
     def post(self):
-        pass
+        self.check_input('username', 'password')
+        user = authenticate(username=self.input['username'], password=self.input['password'])
+        if user is not None:
+            if user.is_active:
+                login(self, user)
+                Login.status=1
+
+
 
 class Logout(APIView):
     def post(self):
-        pass
+        logout(self)
 
 class ActivityList(APIView):
     def get(self):
@@ -25,15 +40,13 @@ class ActivityCreate(APIView):
     def post(self):
         pass
 
-class ImageUpload(APIView):
+class ActivityUpload(APIView):
     def post(self):
         pass
 
 class ActivityDetail(APIView):
     def get(self):
-        print("get")
-        self.check_input('activity_id')
-        return Activity.get_by_id(self.input['activity_id'])
+        pass
     def post(self):
         pass
 
