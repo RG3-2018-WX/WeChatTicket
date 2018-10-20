@@ -128,6 +128,10 @@ class WeChatLib(object):
     def check_signature(self, signature, timestamp, nonce):
         tmp_list = sorted([self.token, timestamp, nonce])
         tmpstr = hashlib.sha1(''.join(tmp_list).encode('utf-8')).hexdigest()
+        if (tmpstr != signature):
+            print("Not Equal")
+        else:
+            print("Equal")
         return tmpstr == signature
 
     @classmethod
@@ -202,6 +206,7 @@ class WeChatView(BaseView):
         return self.lib.check_signature(query['signature'], query['timestamp'], query['nonce'])
 
     def do_dispatch(self, *args, **kwargs):
+        print("check")
         if not settings.IGNORE_WECHAT_SIGNATURE and not self._check_signature():
             self.logger.error('Check WeChat signature failed')
             raise Http404()

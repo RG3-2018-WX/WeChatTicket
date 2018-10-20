@@ -41,6 +41,12 @@ class Activity(models.Model):
         except cls.DoesNotExist:
             raise LogicError("Activity not found")
 
+    @classmethod
+    def get_status_ge_0(cls):
+        try:
+            return cls.objects.filter(status__gte = 0)
+        except cls.DoesNotExist:
+            raise LogicError('Activity Not Found')
 
 class Ticket(models.Model):
     student_id = models.CharField(max_length=32, db_index=True)
