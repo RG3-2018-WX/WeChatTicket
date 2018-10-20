@@ -172,7 +172,7 @@ class ActivityDetail(APIView):
         else:
             return 0
 class ActivityMenu(APIView):
-    i=0
+
     def get(self):
         if not self.request.user.is_authenticated():
             raise ValidateError("Please Login First!")
@@ -183,19 +183,38 @@ class ActivityMenu(APIView):
 
             data_result = {'name': data.name,
                     'id': data.id,
-                    'menuIndex':ActivityMenu.i
+                    'menuIndex':0
                     }
-            ActivityMenu.i=ActivityMenu.i+1
+
             data_result=json.dumps(data_result)
             datalist.append(data_result)
+        datalist.reverse()
+        if len(datalist) < 5:
+            for i in range(0, len(datalist)):
+                datalist[i]["menuIndex"] = 5 - i
+        else:
+            for i in range(0, len(datalist)):
+                datalist[i]["menuIndex"] = max(5 - i, 0)
         return datalist
+
+
 
     def post(self):
         if not self.request.user.is_authenticated():
-            raise ValidateError("Please Login First!")
-        activity=Activity.objects.get(self.input('id'))
-        pass
-
+            raise ValidateError("Please login!")
+        idList = self.input
+        for data in Activity.objects.filter(status=Activity.STATUS_PUBLISHED):
+            data.status = 0
+        activityList = []
+        for id in idList:
+            try:
+                activity = Activity.objects.get(id=id)
+                activity.status = 1
+                activity.save()
+                activityList.append(activity)
+            except:
+                raise ValidateError("no such activity")
+        CustomWeChatView.update_menu(activityList)
 
 
 class ActivityCheckin(APIView):
@@ -223,7 +242,7 @@ class ActivityCheckin(APIView):
             raise ValidateError('ticket Canceled!')
         ticket.status = Ticket.STATUS_USED
         ticket.save()
-        info = {'ticket': ticket.unique_id, 'studentId': ticket.student_id}
-        return info
+        data = {'ticket': ticket.unique_id, 'studentId': ticket.student_id}
+        return data
 
 # Create your views here.
