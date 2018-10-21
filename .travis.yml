@@ -20,3 +20,5 @@ script:
 after_success:
 - chmod 600  ~/.ssh/rg_rsa
 - ssh travis@139.199.124.92 "home/ubuntu/WeChatTicket/deploy.sh"
+addons:
+ ssh_konwn_hosts:139.199.124.92:22
