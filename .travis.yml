@@ -7,7 +7,7 @@ python:
 before_install:
 - sudo chmod 600 ~/.ssh/*
 - sudo touch rg_rsa
-
+- sudo apt-get install sshpass
 - sudo openssl aes-256-cbc -K $encrypted_033a364aed3b_key -iv $encrypted_033a364aed3b_iv
   -in rg_rsa.enc -out rg_rsa -d
 - sudo mysql -e 'CREATE DATABASE wechat_ticket;'
@@ -21,6 +21,6 @@ script:
 - python manage.py test
 after_success:
 - sudo chmod 600  ~/.ssh/rg_rsa
-- echo 'CtaHdF7namGhF' | sudo ssh -o StrictHostKeyChecking=no ubuntu@139.199.124.92 "home/ubuntu/WeChatTicket/deploy.sh"
+- sudo sshpass -p 'CtaHdF7namGhF' -o StrictHostKeyChecking=no ubuntu@139.199.124.92 "home/ubuntu/WeChatTicket/deploy.sh"
 addons:
  ssh_konwn_hosts:139.199.124.92:22
