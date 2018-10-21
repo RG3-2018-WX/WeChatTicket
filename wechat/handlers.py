@@ -147,16 +147,21 @@ class CancelTicketHandler(WeChatHandler):
         if len(ids) == 1:
             return self.reply_text('Please input Activity ID')
         id = ids[1]
-        ticket = Ticket.objects.filter(unique_id=id)
+
+
+        activity = Activity.objects.filter(key=id)
+        if activity == []:
+            return self.reply_text('No Such Activity')
+        activity = activity[0]
+        ticket = Ticket.objects.filter(student_id=self.user.student_id,activity= activity)
         if ticket == []:
             return self.reply_text("Not Valid Ticket ID")
         ticket = ticket[0]
-        if ticket.student_id != self.user.student_id:
-            return self.reply_text("Don't operate on others ticket")
         if ticket.status != Ticket.STATUS_VALID:
             return  self.reply_text("Invalid Ticket")
         ticket.status = Ticket.STATUS_CANCELLED
         ticket.activity.remain_tickets += 1
+        return self.reply_text('Succeed in refund')
 
 
 #需要一个输入参数，可以是unique_id也可以是key
