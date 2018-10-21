@@ -2,9 +2,9 @@ cd /home/ubuntu/WeChatTicket
 echo "pull code"
 git pull origin master
 cp configs.example.json configs.json
-python3 deploy.py
+sudo python3 deploy.py
 
 echo "start djnago project"
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py runserver 0.0.0.0:80
+sudo python3 manage.py makemigrations
+sudo python3 manage.py migrate
+sudo nohup python3 manage.py runserver 0.0.0.0:80
