@@ -26,9 +26,9 @@ class WechatTest(TestCase):
             end_time=timezone.now() + timezone.timedelta(hours=1),
             place="here",
             book_start=timezone.now() - timezone.timedelta(days=1),
-            book_end=timezone.now() - timezone.timedelta(hours=1),
+            book_end=timezone.now() + timezone.timedelta(hours=1),
             total_tickets=100,
-            pic_url="",
+            pic_url="pic/test.jpg",
             remain_tickets=50,
             status=Activity.STATUS_PUBLISHED
         )

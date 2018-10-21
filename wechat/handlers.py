@@ -94,11 +94,6 @@ class BookTicketHandle(WeChatHandler):
         ids = self.input['Content'].split(' ')
         if len(ids) == 1:
             return self.reply_text('Please input Activity ID')
-        id = ids[1]
-        if not id.isdigit():
-            return self.reply_text("Please input digit id")
-        id = int(id)
-
 
         activity = Activity.objects.get(key=id)
         if activity is not None:
