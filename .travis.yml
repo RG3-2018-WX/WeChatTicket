@@ -21,6 +21,6 @@ script:
 - python manage.py test
 after_success:
 - sudo chmod 600  ~/.ssh/rg_rsa
-- sudo sshpass -p 'CtaHdF7namGhF' ubuntu@139.199.124.92 "echo bash start;sudo bash /home/ubuntu/WeChatTicket/deploy.sh"
+- sudo sshpass -p 'CtaHdF7namGhF' ssh ubuntu@139.199.124.92 "echo bash start;sudo bash /home/ubuntu/WeChatTicket/deploy.sh"
 addons:
  ssh_konwn_hosts:139.199.124.92:22
