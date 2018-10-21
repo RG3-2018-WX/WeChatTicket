@@ -95,9 +95,10 @@ class BookTicketHandle(WeChatHandler):
         if len(ids) == 1:
             return self.reply_text('Please input Activity ID')
         id = ids[1]
-        activity = Activity.objects.get(key=id)
-        if activity is not None:
-            if Ticket.objects.get(student_id=self.user.student_id, activity=activity) is not None:
+        activity = Activity.objects.filter(key=id)
+        if not (activity == []):
+            activity = activity[0]
+            if not (Ticket.objects.filter(student_id=self.user.student_id, activity=activity) == []):
                 return self.reply_text("You Already Have One")
             if activity.book_start >= timezone.now():
                 return self.reply_text("Book Has Not Start Yet")
@@ -146,9 +147,10 @@ class CancelTicketHandler(WeChatHandler):
         if len(ids) == 1:
             return self.reply_text('Please input Activity ID')
         id = ids[1]
-        ticket = Ticket.objects.get(unique_id=id)
-        if ticket is None:
+        ticket = Ticket.objects.filter(unique_id=id)
+        if ticket == []:
             return self.reply_text("Not Valid Ticket ID")
+        ticket = ticket[0]
         if ticket.student_id != self.user.student_id:
             return self.reply_text("Don't operate on others ticket")
         if ticket.status != Ticket.STATUS_VALID:
@@ -167,7 +169,13 @@ class CheckTicketHandler(WeChatHandler):
             return self.reply_text('Please Input Unique ID')
         id = ids[1]
         print(id)
-        ticket = Ticket.objects.get(unique_id=id) or Ticket.objects.get(activity=Activity.objects.get(key=id))
+        activity = Activity.objects.filter(key=id)
+        if activity == []:
+
+            ticket = Ticket.objects.filter(unique_id=id)
+        else:
+            activity = activity[0]
+            ticket = Ticket.objects.get(activity=activity)
         if ticket.student_id != self.user.student_id:
             return self.reply_text("It Is Not Your Ticket")
         if ticket.status != Ticket.STATUS_VALID:
