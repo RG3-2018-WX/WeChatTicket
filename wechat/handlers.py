@@ -94,7 +94,7 @@ class BookTicketHandle(WeChatHandler):
         ids = self.input['Content'].split(' ')
         if len(ids) == 1:
             return self.reply_text('Please input Activity ID')
-
+        print(id)
         activity = Activity.objects.get(key=id)
         if activity is not None:
             if Ticket.objects.get(student_id=self.user.student_id, activity=Activity.objects.get(key=id)) is not None:
