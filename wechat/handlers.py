@@ -177,9 +177,10 @@ class CheckTicketHandler(WeChatHandler):
             return self.reply_text("It Is Not Your Ticket")
         if ticket.status != Ticket.STATUS_VALID:
             return self.reply_text("Invalid Ticket")
+        if ticket.activity.status != Activity.STATUS_PUBLISHED:
+            return self.reply_text("No Such Activity")
         ticket.status = Ticket.STATUS_USED
         return self.reply_text("Check Success")
-
 
 
 

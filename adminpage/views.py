@@ -18,6 +18,7 @@ import os
 
 class Login(APIView):
     def get(self):
+        print("Login Get")
         if not self.request.user.is_authenticated():
             raise ValidateError("Please Login!")
 
@@ -25,6 +26,7 @@ class Login(APIView):
     def post(self):
         self.check_input('username', 'password')
         user = authenticate(username=self.input['username'], password=self.input['password'])
+
         if user is not None and user.is_active:
              login(self.request, user)
              return
@@ -36,6 +38,7 @@ class Login(APIView):
 class Logout(APIView):
 
     def post(self):
+        print("Log out Post")
         if not self.request.user.is_authenticated():
             raise LogicError('no user is online')
         else:

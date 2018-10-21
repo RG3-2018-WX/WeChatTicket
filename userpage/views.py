@@ -15,12 +15,10 @@ class UserBind(APIView):
             raise ValidateError()
 
     def get(self):
-        print("get user bind")
         self.check_input('openid')
         return User.get_by_openid(self.input['openid']).student_id
 
     def post(self):
-        print("post user bind")
         self.check_input('openid', 'student_id', 'password')
         user = User.get_by_openid(self.input['openid'])
         self.validate_user()
@@ -31,7 +29,7 @@ class ActivityDetail(APIView):
     def get(self):
         self.check_input('id')
         activity=Activity.objects.get(id=self.input['id'])
-        if activity.status==1:
+        if activity.status==Activity.STATUS_PUBLISHED:
             data={'name':activity.name,
                   'key':activity.key,
                   'description':activity.description,
