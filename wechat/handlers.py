@@ -96,9 +96,9 @@ class BookTicketHandle(WeChatHandler):
             return self.reply_text('Please input Activity ID')
         id = ids[1]
         activity = Activity.objects.filter(key=id)
-        if not (activity == []):
+        if (len(activity)):
             activity = activity[0]
-            if not (Ticket.objects.filter(student_id=self.user.student_id, activity=activity) == []):
+            if len(Ticket.objects.filter(student_id=self.user.student_id, activity=activity)):
                 return self.reply_text("You Already Have One")
             if activity.book_start >= timezone.now():
                 return self.reply_text("Book Has Not Start Yet")
@@ -150,11 +150,11 @@ class CancelTicketHandler(WeChatHandler):
 
 
         activity = Activity.objects.filter(key=id)
-        if activity == []:
+        if not len(activity):
             return self.reply_text('No Such Activity')
         activity = activity[0]
         ticket = Ticket.objects.filter(student_id=self.user.student_id,activity= activity)
-        if ticket == []:
+        if not len(ticket):
             return self.reply_text("Not Valid Ticket ID")
         ticket = ticket[0]
         if ticket.status != Ticket.STATUS_VALID:
@@ -175,7 +175,7 @@ class CheckTicketHandler(WeChatHandler):
         id = ids[1]
         print(id)
         activity = Activity.objects.filter(key=id)
-        if activity == []:
+        if not(len(activity)):
 
             ticket = Ticket.objects.filter(unique_id=id)
         else:
