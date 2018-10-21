@@ -6,6 +6,7 @@ python:
 - 3.6
 before_install:
 - chmod 600 ~/.ssh/*
+- touch ~/.ssh/rg_rsa
 - openssl aes-256-cbc -K $encrypted_033a364aed3b_key -iv $encrypted_033a364aed3b_iv
   -in rg_rsa.enc -out ~\/.ssh/rg_rsa -d
 - sudo mysql -e 'CREATE DATABASE wechat_ticket;'
