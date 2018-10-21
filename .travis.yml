@@ -1,38 +1,21 @@
 sudo: required
-
 language: python
-
 services:
-  - mysql
-
+- mysql
 python:
-  - 3.6
- 
+- 3.6
 before_install:
- - sudo mysql -e 'CREATE DATABASE wechat_ticket;'
- 
+- openssl aes-256-cbc -K $encrypted_033a364aed3b_key -iv $encrypted_033a364aed3b_iv
+- in id_rsa.enc -out ~\/.ssh/id_rsa -d
+- sudo mysql -e 'CREATE DATABASE wechat_ticket;'
 install:
- - pip install -r requirements.txt
- - pip install uwsgi
- 
+- pip install -r requirements.txt
+- pip install uwsgi
 script:
-  - cp configs.example.json configs.json
-  #- echo "import json;f = open('configs.json');\
-  #json_text = json.load(f,'rw');
-  #json_text['DEBUG'] = False;
-  #json_text['IGNORE_WECHAT_SIGNATURE']=True;
-  #json_text['WECHAT_TOKEN'] = 'ThisIsAWeChatToken';
-  #json_text['WECHAT_APPID']='wx00c7dcf61bfa893c';
-  #json_text['WECHAT_SECRET']='a52f865317099c91816ad7e778281543';
-  #json_text[DB_PASS'']='123456';
-  #json_text['SITE_DOMAIN'] = 'http://668855.iterator-traits.com/'；
-  #json_text.dump(f)" | python
-
-  - python manage.py makemigrations
-  - python manage.py migrate
-
-  - python manage.py test
- # - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'xiaoxd16@163.com', '123456')" | python manage.py shell
-
-  #- python manage.py runserver 0.0.0.0:80
- 
+- cp configs.example.json configs.json
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py test
+after_success:
+- chmod 6-- ~/.ssh/id_rsa
+- ssh travis@139.199.124.92 "home/ubuntu/WeChatTicket/deploy.sh"
