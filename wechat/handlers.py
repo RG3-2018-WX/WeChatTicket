@@ -97,7 +97,7 @@ class BookTicketHandle(WeChatHandler):
         id = ids[1]
         activity = Activity.objects.get(key=id)
         if activity is not None:
-            if Ticket.objects.get(student_id=self.user.student_id, activity=Activity.objects.get(key=id)) is not None:
+            if Ticket.objects.get(student_id=self.user.student_id, activity=activity) is not None:
                 return self.reply_text("You Already Have One")
             if activity.book_start >= timezone.now():
                 return self.reply_text("Book Has Not Start Yet")
