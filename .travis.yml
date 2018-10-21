@@ -34,5 +34,5 @@ script:
   - python manage.py test
  # - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'xiaoxd16@163.com', '123456')" | python manage.py shell
 
-  - python manage.py manage.py 0.0.0.0:80
+  - python manage.py 0.0.0.0:80
  
